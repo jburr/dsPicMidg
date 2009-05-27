@@ -4,8 +4,9 @@
 
 #include "midgSim.h"
 #include "midg.h"
+#include "circBuffer.h"
 
-#define MIN(x,y) (x < y ? x : y)
+#define MIN(x,y) ((x) < (y) ? (x) : (y))
 
 // sleazy globals...
 extern CBRef midgUartBuffer; // declared in midg.c
