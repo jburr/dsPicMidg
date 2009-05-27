@@ -1,13 +1,20 @@
 // Code by: John B. Burr, heavily based on bufferedUART.c
 // Started 5/17/09
 
+#include "apDefinitions.h"
+#include "midg.h"
+#include "circBuffer.h"
+
 #if __IN_DSPIC__
+#warning "just a reminder: we're __IN_DSPIC__"
 #include <uart.h>
 #include "simpleUart.h"
+#include <p33fxxxx.h>
+#else
+#warning "just a reminder: we're NOT __IN_DSPIC__ so we're compiling for a PC?"
+#include <stdio.h>
 #endif
 
-#include "midg.h"
-#include "apDefinitions.h"
 // include all the configuration messages set up in midgMsgConfigDefn.c
 #include "midgConfigMsgDefns.c"
 
@@ -27,10 +34,9 @@ CBRef midgUartBuffer;   // use the pointer!
         #define URXIF IFS0bits.U1RXIF
         #define URXIE IEC0bits.U1RXIE
         #define URXREG U1RXREG
-    
         
-        #define putcMidgUART(c) putcUART1(c)
-        #define BusyMidgUART BusyUART1()
+        #define putcMidgUART WriteUART1
+        #define BusyMidgUART BusyUART1
         #define printToMidgUart printToUart1
         
     #elif ((_MIDG_UART2_ == 1) && (_MIDG_UART1_ == 0))
@@ -43,8 +49,8 @@ CBRef midgUartBuffer;   // use the pointer!
         #define URXIE IEC1bits.U2RXIE
         #define URXREG U2RXREG
 
-        #define putcMidgUART(c) putcUART2(c)
-        #define BusyMidgUART BusyUART2()
+        #define putcMidgUART WriteUART2
+        #define BusyMidgUART BusyUART2
         #define printToMidgUart printToUart2
     #else
         #error "Check midg.h for UART selection--exactly one must be selected"
@@ -81,8 +87,9 @@ CBRef midgUartBuffer;   // use the pointer!
         
         // UxBRG Register (set by #define in midg.h)
         // ==============
-        UBRG = MIDG_UBRG;			// Set the baud rate for MIDG's default
-    
+        //UBRG = MIDG_UBRG;			// Set the baud rate for MIDG's default
+        UBRG = UCSCAP_UBRGF; // test @ 19200
+        
         // Enable the port;
         UMODEbits.UARTEN	= 1;		// Enable the port
         USTAbits.UTXEN		= 1;		// Enable TX
@@ -94,34 +101,12 @@ CBRef midgUartBuffer;   // use the pointer!
             Nop();
         }
     
-       
+        printToUart2("uart2 initialized in midgInit()\n\r");
+        while(BusyUART2());
+        
         // configure the MIDG to only send desired messages
         midgConfig();
         
-/*
-      // Disable the port and TX;
-        UMODEbits.UARTEN	= 0;		// Disable the port	
-        
-        // UBRG Register
-        // ==============
-        UBRG = UCSCAP_UBRGF;			// Set the baud rate for operation of GPS	
-        
-        // Enable the port;
-        UMODEbits.UARTEN	= 1;		// Enable the port	
-        USTAbits.UTXEN		= 1;		// Enable TX
-        
-        for( i = 0; i < 32700; i += 1 )
-        {
-            Nop();
-        }
-        
-        // Configure the frequency to 5 Hz
-        gpsFreqConfig();
-        
-        // Disable the port and TX;
-        UMODEbits.UARTEN	= 0;		// Disable the port	
-    */
-       
         // Initialize the Interrupt  
         URXIP   = 6;    		// Interrupt priority 6  
         URXIF   = 0;    		// Clear the interrupt flag
@@ -255,4 +240,3 @@ void midgMsgAppendChecksum(unsigned char* message) {
     #endif
      */
 }
->>>>>>> c2bbb936233917c609fa2245938088e1cad8a114:midg.c

@@ -17,6 +17,7 @@ static unsigned char midgMsgID_27[] = MSG_OFF(27);
 static unsigned char midgMsgID_10[] = MSG_DIV(10,1);
 static unsigned char midgMsgID_12[] = MSG_DIV(12,1);
 
+/*
 static unsigned char* midgConfigMsgs[] = {   midgMsgID_1
                                             ,midgMsgID_2
                                             ,midgMsgID_3
@@ -31,3 +32,6 @@ static unsigned char* midgConfigMsgs[] = {   midgMsgID_1
                                             ,midgMsgID_26
                                             ,midgMsgID_27
                                             };
+*/
+
+static unsigned char* midgConfigMsgs[] = { midgMsgID_10 };

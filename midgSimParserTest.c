@@ -55,5 +55,3 @@ int main(int argc, char** argv) {
     printf("%d bytes read.  now exiting.\n", bytesRead);
     exit(EXIT_SUCCESS);
 }
-
->>>>>>> c2bbb936233917c609fa2245938088e1cad8a114:midgSimParserTest.c

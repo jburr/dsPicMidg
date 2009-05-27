@@ -1,17 +1,6 @@
 #ifndef _MIDG_H_
 #define _MIDG_H_
 
-#include "circBuffer.h"
-
-#if __IN_DSPIC__
-#include <p33fxxxx.h>
-#else
-#include <stdio.h>
-#endif
-/*
-#include <uart.h>
-*/
-
 // select which UART to use by setting exactly 
 // one of the below to 1, the other(s) to 0
 #define _MIDG_UART1_ 0
@@ -49,4 +38,3 @@ void midgRead(unsigned char* midgChunk);
 
 
 #endif /* _MIDG_H_ */
->>>>>>> c2bbb936233917c609fa2245938088e1cad8a114:midg.h

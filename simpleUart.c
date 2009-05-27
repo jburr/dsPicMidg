@@ -5,6 +5,9 @@
 #include "apDefinitions.h"
 #include "simpleUart.h"
 
+// FIXME: just grabbing MIDG_UBRG
+#include "midg.h"
+
 // UART and Buffer initialization
 void uartInit (void){
 	// Configure and open the port;
@@ -25,12 +28,14 @@ void uartInit (void){
 	
 	// U1STA Register
 	// ==============
-	U1STAbits.URXISEL	= 2;		// RX interrupt when 3 chars are in
+	//U1STAbits.URXISEL	= 2;		// RX interrupt when 3 chars are in
+    U1STAbits.URXISEL	= 0;		// RX interrupt when just one char comes in
 	U1STAbits.OERR		= 0;		// clear overun error
 	
 	// U1BRG Register
 	// ==============
-	U1BRG = UCSCAP_UBRGF;			// Set the baud rate for operation of GPS	
+	//U1BRG = MIDG_UBRG;			// Set the baud rate to try and keep up with MIDG
+    U1BRG = UCSCAP_UBRGF; // 19200
     
 	// Enable the port;
 	U1MODEbits.UARTEN	= 1;		// Enable the port	
@@ -42,6 +47,12 @@ void uartInit (void){
 	{
 		Nop();
 	}
+    
+    printToUart1("uart1 initialized in uartInit()\n\r");
+    while(BusyUART1());
+
+    printToUart1("uart1 still working in uartInit()?\n\r");
+    while(BusyUART1());		
 }
 
 void printToUart2 (const char *fmt, ...){

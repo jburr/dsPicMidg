@@ -1,6 +1,6 @@
 #ifndef _MIDGTEST_H_
 #define _MIDGTEST_H_
 
-void copyMidgToUart2(void);
+void copyMidgToUart1();
 
 #endif /* _MIDGTEST_H_ */

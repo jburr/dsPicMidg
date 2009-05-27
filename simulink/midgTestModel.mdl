@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.53"
+    ComputedModelVersion    "1.69"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -44,8 +44,8 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "jburr"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri May 22 19:39:12 2009"
-  ModelVersionFormat	  "1.%<AutoIncrement:53>"
+  LastModifiedDate	  "Tue May 26 23:15:57 2009"
+  ModelVersionFormat	  "1.%<AutoIncrement:69>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -107,7 +107,7 @@ Model {
 	  StartTime		  "0.0"
 	  StopTime		  "10.0"
 	  AbsTol		  "auto"
-	  FixedStep		  "0.001"
+	  FixedStep		  "0.01"
 	  InitialStep		  "auto"
 	  MaxNumMinSteps	  "-1"
 	  MaxOrder		  5
@@ -325,7 +325,7 @@ Model {
 	  CustomHeaderCode	  "#define __IN_DSPIC__ 1\n"
 	  CustomInclude		  "..\\"
 	  CustomSource		  "..\\circBuffer.c ..\\midg.c ..\\midgTest.c "
-"..\\bufferedUART.c"
+"..\\simpleUart.c"
 	  IncludeHyperlinkInReport off
 	  LaunchReport		  off
 	  TargetLang		  "C"
@@ -590,7 +590,7 @@ Model {
 	PropName		"Components"
       }
       Name		      "Configuration"
-      CurrentDlgPage	      "Real-Time Workshop/Custom Code"
+      CurrentDlgPage	      "Solver"
     }
     PropName		    "ConfigurationSets"
   }
@@ -761,7 +761,7 @@ Model {
   }
   System {
     Name		    "midgTestModel"
-    Location		    [1288, 107, 2308, 652]
+    Location		    [1282, 78, 2302, 748]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -775,38 +775,6 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "93"
     ReportName		    "simulink-default.rpt"
-    Block {
-      BlockType		      Reference
-      Name		      "C Function Call"
-      Tag		      "dsPIC_dsPIC_CFunctionCall"
-      Ports		      []
-      Position		      [55, 235, 180, 275]
-      List {
-	ListType		RTWdata
-	FctDeclaration		"extern void midgInit();"
-	FctCall			"midgInit();"
-	fctName			"midgInit"
-	INPUT_SIZE		"0"
-	OUTPUT_SIZE		"0"
-	NBR_INPUT		"0"
-	NBR_OUTPUT		"0"
-      }
-      SourceBlock	      "dsPICdrivers/OTHERS/C Function Call"
-      SourceType	      "C Function Call"
-      fctName		      "'midgInit'"
-      INPUT_SIZE	      "0"
-      INPUT1		      "--"
-      INPUT2		      "--"
-      INPUT3		      "--"
-      OUTPUT_SIZE	      "0"
-      OUTPUT1		      "--"
-      SampleTime	      "inf"
-      InputType		      "[ ]"
-      OutputType	      "[ ]"
-      FctDeclaration	      "extern void midgInit();"
-      FctCall		      "midgInit();"
-      OrderingInOutPopup      "None"
-    }
     Block {
       BlockType		      Reference
       Name		      "C Function Call1"
@@ -1079,8 +1047,8 @@ Model {
       Quartz_33f	      "8e6 "
       PLLActive_33f	      on
       fcyDesired_33f	      "40000000"
-      tmr1		      "[1  39999  0]"
-      tmr1Info		      "Time Step : 0.001  ;   Error : 0%  PR1=39999"
+      tmr1		      "[8  49999  0]"
+      tmr1Info		      "Time Step : 0.01  ;   Error : 0%  PR1=49999"
       tmr2345		      "[0  0  0  0  0  0  0  0]"
       tmr2345cfg	      "[-1 -1 -1 -1 -1 -1 -1 -1]"
       IOautoConf	      on
