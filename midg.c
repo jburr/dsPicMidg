@@ -3,20 +3,17 @@
 
 #if __IN_DSPIC__
 #include <uart.h>
+#include "simpleUart.h"
 #endif
 
 #include "midg.h"
 #include "apDefinitions.h"
-
-//#include "simpleUart.h"
-//#include "bufferedUART.h"
+// include all the configuration messages set up in midgMsgConfigDefn.c
+#include "midgConfigMsgDefns.c"
 
 // midg.c globals to be set up in init()
 struct CircBuffer midgUartBufferData;  // struct should never be used directly!
 CBRef midgUartBuffer;   // use the pointer!
-
-// include all the configuration messages set up in midgMsgConfigDefn.c
-#include "midgConfigMsgDefns.c"
 
 // dsPic specific implementation goes in here; the rest can be either on PC or embeded
 #if __IN_DSPIC__
