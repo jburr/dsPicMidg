@@ -1,8 +1,15 @@
 // Code by: John B. Burr, heavily based on bufferedUART.c
 // Started 5/17/09
 
+#if __IN_DSPIC__
+#include <uart.h>
+#include "simpleUart.h"
+#endif
+
 #include "midg.h"
 #include "apDefinitions.h"
+// include all the configuration messages set up in midgMsgConfigDefn.c
+#include "midgConfigMsgDefns.c"
 
 // midg.c globals to be set up in init()
 struct CircBuffer midgUartBufferData;  // struct should never be used directly!
@@ -20,6 +27,11 @@ CBRef midgUartBuffer;   // use the pointer!
         #define URXIF IFS0bits.U1RXIF
         #define URXIE IEC0bits.U1RXIE
         #define URXREG U1RXREG
+    
+        
+        #define putcMidgUART(c) putcUART1(c)
+        #define BusyMidgUART BusyUART1()
+        #define printToMidgUart printToUart1
         
     #elif ((_MIDG_UART2_ == 1) && (_MIDG_UART1_ == 0))
         #warning "just a reminder: midg.c using UART2"
@@ -30,13 +42,15 @@ CBRef midgUartBuffer;   // use the pointer!
         #define URXIF IFS1bits.U2RXIF
         #define URXIE IEC1bits.U2RXIE
         #define URXREG U2RXREG
-        
+
+        #define putcMidgUART(c) putcUART2(c)
+        #define BusyMidgUART BusyUART2()
+        #define printToMidgUart printToUart2
     #else
         #error "Check midg.h for UART selection--exactly one must be selected"
     #endif
 
 
-    // FIXME: still has gps-specific calls and setup in it!
     // UART and Buffer initialization
     void midgInit (void){
         // initialize the circular buffer
@@ -80,10 +94,12 @@ CBRef midgUartBuffer;   // use the pointer!
             Nop();
         }
     
-    /*	// Configure the GPS sentences and change the baud Rate
-        gpsSentenceConfig();
+       
+        // configure the MIDG to only send desired messages
+        midgConfig();
         
-        // Disable the port and TX;
+/*
+      // Disable the port and TX;
         UMODEbits.UARTEN	= 0;		// Disable the port	
         
         // UBRG Register
@@ -105,6 +121,7 @@ CBRef midgUartBuffer;   // use the pointer!
         // Disable the port and TX;
         UMODEbits.UARTEN	= 0;		// Disable the port	
     */
+       
         // Initialize the Interrupt  
         URXIP   = 6;    		// Interrupt priority 6  
         URXIF   = 0;    		// Clear the interrupt flag
@@ -140,10 +157,41 @@ CBRef midgUartBuffer;   // use the pointer!
     void midgInit (void){
         // initialize the circular buffer
         midgUartBuffer = newCircBuffer(BSIZE);
+        
+        midgConfig();
     }
           
 #endif
 
+void midgConfig() {
+    int currentMessage;
+    int currentByte;
+    unsigned int numMessages = (unsigned int)(sizeof(midgConfigMsgs)/sizeof(unsigned char*));
+    
+    #if !__IN_DSPIC__
+    printf("there are %u config messages\n", numMessages);
+    #endif
+    
+    // iterate through the config messages
+    for ( currentMessage = 0; currentMessage < numMessages; currentMessage++ ) {
+        midgMsgAppendChecksum( midgConfigMsgs[currentMessage] );
+        
+        // send one byte out at a time.  midgConfigMsgs[currentMessage][3]+6 = count+6 = message length
+        for ( currentByte = 0; currentByte < midgConfigMsgs[currentMessage][3]+6; currentByte++ ) {
+            #if __IN_DSPIC__
+            putcMidgUART(midgConfigMsgs[currentMessage][currentByte]);
+            while(BusyMidgUART());
+            #else 
+            printf("%02X ", midgConfigMsgs[currentMessage][currentByte]);
+            #endif
+        }
+    #if !__IN_DSPIC__
+    printf("\n");
+    #endif
+        
+    //maybe we'll have to wait here?
+    }
+}
 
 void midgRead(unsigned char* midgChunk) {
     unsigned int tmpLen = getLength(midgUartBuffer);
@@ -173,20 +221,22 @@ void midgRead(unsigned char* midgChunk) {
     #endif
 }
 
- void midgMsgAppendChecksum(unsigned char* message) {
+void midgMsgAppendChecksum(unsigned char* message) {
     int checksum0;
     int checksum1;
     int n;
     
     int length = message[3]+6;
-    
+
+    /*
     #if !__IN_DSPIC__
-    printf("in calculateChecksum()\n");
+    printf("in midgMsgAppendChecksum()\n");
     for ( n = 0; n < length; n++ ) {
-       printf("%u ", (unsigned int)message[n]);
+       printf("%02X ", (unsigned int)message[n]);
     }
     printf("\n");
     #endif
+     */
     
     for (checksum0=0, checksum1=0, n=2; n < length-2; n++) {
        checksum0=checksum0+message[n];
@@ -196,10 +246,13 @@ void midgRead(unsigned char* midgChunk) {
     message[length-2] = checksum0;
     message[length-1] = checksum1;
     
+    /*
     #if !__IN_DSPIC__
     for ( n = 0; n < length; n++ ) {
-       printf("%u ", (unsigned int)message[n]);
+       printf("%02X ", (unsigned int)message[n]);
     }
     printf("\n");
     #endif
- }
+     */
+}
+>>>>>>> c2bbb936233917c609fa2245938088e1cad8a114:midg.c

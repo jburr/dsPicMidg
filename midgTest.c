@@ -8,28 +8,6 @@
 
 //#include "bufferedUART.h"
 
-void printToUart2 (const char *fmt, ...){
-	va_list ap;
-	char buf [300];
-	
-	va_start(ap, fmt);
-	vsprintf(buf, fmt, ap);
-	va_end (ap);
-	putsUART2((unsigned int*)buf);
-    while(BusyUART2());	
-}
-
-void printToUart1 (const char *fmt, ...){
-	va_list ap;
-	char buf [300];
-	
-	va_start(ap, fmt);
-	vsprintf(buf, fmt, ap);
-	va_end (ap);
-	putsUART1((unsigned int*)buf);
-    while(BusyUART1());	
-}
-
 void copyMidgToUart2() {
     unsigned char buf[MIDG_CHUNKSIZE];
     
@@ -74,3 +52,4 @@ void copyMidgToUart1() {
     }
     printToUart1(">\r\n\0");
 }
+>>>>>>> c2bbb936233917c609fa2245938088e1cad8a114:midgTest.c

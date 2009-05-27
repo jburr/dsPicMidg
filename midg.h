@@ -21,32 +21,32 @@
 #define MIDG_UBRG 21 
 // if FCY = 40 000 000
 
-// configuration messages
-
-// Generic MIDG Message Format
-// {SYNC 0, SYNC 1, ID, COUNT = N, PAYLOAD 1, ..., PAYLOAD N, CKSUM 0, CKSUM 1}
-
-// CFG_SET
-// {0x81,0xA1,35,COUNT,PAYLOAD,CKSUM0, CKSUM1}
+#define MIDG_CHUNKSIZE 100
 
 /******************************************************************************
  * Creates a new MIDG message with incorrect checksum bytes.
  *
+ * Generic MIDG Message Format
+ * {SYNC 0, SYNC 1, ID, COUNT = N, PAYLOAD 1, ..., PAYLOAD N, CKSUM 0, CKSUM 1}
+ *
  * NOTE: A call to midgMsgAppendChecksum() MUST be made to correctly fill the
  *       checksum bytes.
  */
+
 #define MIDG_MSG(id,count, ...) {129,161, id, count, __VA_ARGS__, 0xFF, 0xFF}
 
 #define CFG_SET(count, ...) MIDG_MSG(35,count,__VA_ARGS__)
 
-#define MSG_DIV(count, ...) CFG_SET(count,__VA_ARGS__)
-/******************************************************************************/
-void midgMsgAppendChecksum(unsigned char* message);
+#define MSG_DIV(id,div) CFG_SET(3,5,id,div)
 
-#define MIDG_CHUNKSIZE 100
+#define MSG_OFF(id) MSG_DIV(id,0)
+/******************************************************************************/
 
 void midgInit(void);
+void midgConfig(void);
+void midgMsgAppendChecksum(unsigned char* message);
 void midgRead(unsigned char* midgChunk);
 
 
 #endif /* _MIDG_H_ */
+>>>>>>> c2bbb936233917c609fa2245938088e1cad8a114:midg.h
