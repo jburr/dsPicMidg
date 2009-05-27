@@ -149,8 +149,10 @@ void midgRead(unsigned char* midgChunk) {
     unsigned int tmpLen = getLength(midgUartBuffer);
     unsigned int i;
     
-   printf("tmpLen before readFront()s = %u\n", tmpLen);
-   
+    #if !__IN_DSPIC__
+    printf("tmpLen before readFront()s = %u\n", tmpLen);
+    #endif
+    
     // midgChunk[0] = bytes in midgChunk after read
     // midgChunk[MIDG_CHUNKSIZE-1] = bytes remaining in buffer after read
     if ( tmpLen > MIDG_CHUNKSIZE - 2 ) {
@@ -166,5 +168,38 @@ void midgRead(unsigned char* midgChunk) {
     for ( i = 1; i <= midgChunk[0]; i++ ) {
         midgChunk[i] = readFront(midgUartBuffer);
     }
-   printf("getLength(midgUartBuffer) = %u\n", getLength(midgUartBuffer));
+    #if !__IN_DSPIC__
+    printf("getLength(midgUartBuffer) = %u\n", getLength(midgUartBuffer));
+    #endif
 }
+
+ void midgMsgAppendChecksum(unsigned char* message) {
+    int checksum0;
+    int checksum1;
+    int n;
+    
+    int length = message[3]+6;
+    
+    #if !__IN_DSPIC__
+    printf("in calculateChecksum()\n");
+    for ( n = 0; n < length; n++ ) {
+       printf("%u ", (unsigned int)message[n]);
+    }
+    printf("\n");
+    #endif
+    
+    for (checksum0=0, checksum1=0, n=2; n < length-2; n++) {
+       checksum0=checksum0+message[n];
+       checksum1=checksum1+checksum0;
+    }
+    
+    message[length-2] = checksum0;
+    message[length-1] = checksum1;
+    
+    #if !__IN_DSPIC__
+    for ( n = 0; n < length; n++ ) {
+       printf("%u ", (unsigned int)message[n]);
+    }
+    printf("\n");
+    #endif
+ }

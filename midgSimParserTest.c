@@ -11,6 +11,22 @@ int main(int argc, char** argv) {
 		exit(1);
 	}
    
+   // just for testing...
+   
+   unsigned char test[] = MSG_DIV(3,5,2,50);
+   
+   int z;
+   for ( z = 0; z < 9; z++ ) {
+      printf("%u ", (unsigned int)test[z]);
+   }
+   printf("\n");
+   
+   printf("here\n");
+   
+   midgMsgAppendChecksum( test );
+   
+   // end sandbox
+   
    midgInit();
    
    long int size = midgSimGetInput( argv[1] );
