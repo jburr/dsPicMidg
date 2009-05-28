@@ -10,25 +10,29 @@
 #define MIDG_UBRG 21 
 // if FCY = 40 000 000
 
-#define MIDG_CHUNKSIZE 100
+#define MIDG_CHUNKSIZE 257
 
-/******************************************************************************
+/*******************************************************************************
  * Creates a new MIDG message with incorrect checksum bytes.
- *
- * Generic MIDG Message Format
- * {SYNC 0, SYNC 1, ID, COUNT = N, PAYLOAD 1, ..., PAYLOAD N, CKSUM 0, CKSUM 1}
  *
  * NOTE: A call to midgMsgAppendChecksum() MUST be made to correctly fill the
  *       checksum bytes.
+ *
+ * Generic MIDG Message Format:
+ * {SYNC 0, SYNC 1, ID, COUNT = N, PAYLOAD 1, ..., PAYLOAD N, CKSUM 0, CKSUM 1}
+ *
  */
 
 #define MIDG_MSG(id,count, ...) {129,161, id, count, __VA_ARGS__, 0xFF, 0xFF}
 
-#define CFG_SET(count, ...) MIDG_MSG(35,count,__VA_ARGS__)
+#define MIDG_CFG_SET(count, ...) MIDG_MSG(35,count,__VA_ARGS__)
 
-#define MSG_DIV(id,div) CFG_SET(3,5,id,div)
+#define MIDG_MSG_DIV(id,div) MIDG_CFG_SET(3,5,id,div)
 
-#define MSG_OFF(id) MSG_DIV(id,0)
+#define MIDG_MSG_OFF(id) MIDG_MSG_DIV(id,0)
+
+#define MIDG_RESET MIDG_MSG( 99, 4, 0x01, 0x31, 0x06, 0x55 )
+
 /******************************************************************************/
 
 void midgInit(void);

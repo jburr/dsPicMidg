@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <uart.h>
+#include <stdio.h>
 
 #include "apDefinitions.h"
 #include "simpleUart.h"
@@ -34,8 +35,7 @@ void uartInit (void){
 	
 	// U1BRG Register
 	// ==============
-	//U1BRG = MIDG_UBRG;			// Set the baud rate to try and keep up with MIDG
-    U1BRG = UCSCAP_UBRGF; // 19200
+	U1BRG = MIDG_UBRG;			// Set the baud rate to try and keep up with MIDG
     
 	// Enable the port;
 	U1MODEbits.UARTEN	= 1;		// Enable the port	
@@ -49,10 +49,6 @@ void uartInit (void){
 	}
     
     printToUart1("uart1 initialized in uartInit()\n\r");
-    while(BusyUART1());
-
-    printToUart1("uart1 still working in uartInit()?\n\r");
-    while(BusyUART1());		
 }
 
 void printToUart2 (const char *fmt, ...){

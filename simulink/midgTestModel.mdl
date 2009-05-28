@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.69"
+    ComputedModelVersion    "1.86"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -44,8 +44,8 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "jburr"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue May 26 23:15:57 2009"
-  ModelVersionFormat	  "1.%<AutoIncrement:69>"
+  LastModifiedDate	  "Wed May 27 21:02:39 2009"
+  ModelVersionFormat	  "1.%<AutoIncrement:86>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -530,8 +530,8 @@ Model {
 	      CustomProperty {
 		DataType		"string"
 		Name			"OPTIM_GCC"
-		Value			"-mcpu=33fJ256MC710 -O3 -fschedule-ins"
-"ns -fschedule-insns2 "
+		Value			"-Wall -mcpu=33fJ256MC710 -O3 -fschedu"
+"le-insns -fschedule-insns2 "
 	      }
 	      CustomProperty {
 		DataType		"string"
@@ -590,7 +590,7 @@ Model {
 	PropName		"Components"
       }
       Name		      "Configuration"
-      CurrentDlgPage	      "Solver"
+      CurrentDlgPage	      "Real-Time Workshop"
     }
     PropName		    "ConfigurationSets"
   }
@@ -761,7 +761,7 @@ Model {
   }
   System {
     Name		    "midgTestModel"
-    Location		    [1282, 78, 2302, 748]
+    Location		    [115, 212, 1135, 882]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -780,7 +780,7 @@ Model {
       Name		      "C Function Call1"
       Tag		      "dsPIC_dsPIC_CFunctionCall"
       Ports		      []
-      Position		      [60, 430, 185, 470]
+      Position		      [85, 435, 210, 475]
       List {
 	ListType		RTWdata
 	FctDeclaration		"extern void copyMidgToUart1();"
@@ -800,7 +800,7 @@ Model {
       INPUT3		      "--"
       OUTPUT_SIZE	      "0"
       OUTPUT1		      "--"
-      SampleTime	      "1"
+      SampleTime	      ".02"
       InputType		      "[ ]"
       OutputType	      "[ ]"
       FctDeclaration	      "extern void copyMidgToUart1();"
@@ -812,12 +812,12 @@ Model {
       Name		      "C Function Call2"
       Tag		      "dsPIC_dsPIC_CFunctionCall"
       Ports		      []
-      Position		      [55, 315, 180, 355]
+      Position		      [65, 320, 190, 360]
       List {
 	ListType		RTWdata
-	FctDeclaration		"extern void uartInit();"
-	FctCall			"uartInit();"
-	fctName			"uartInit"
+	FctDeclaration		"extern void midgTestInit();"
+	FctCall			"midgTestInit();"
+	fctName			"midgTestInit"
 	INPUT_SIZE		"0"
 	OUTPUT_SIZE		"0"
 	NBR_INPUT		"0"
@@ -825,7 +825,7 @@ Model {
       }
       SourceBlock	      "dsPICdrivers/OTHERS/C Function Call"
       SourceType	      "C Function Call"
-      fctName		      "'uartInit'"
+      fctName		      "'midgTestInit'"
       INPUT_SIZE	      "0"
       INPUT1		      "--"
       INPUT2		      "--"
@@ -835,8 +835,8 @@ Model {
       SampleTime	      "inf"
       InputType		      "[ ]"
       OutputType	      "[ ]"
-      FctDeclaration	      "extern void uartInit();"
-      FctCall		      "uartInit();"
+      FctDeclaration	      "extern void midgTestInit();"
+      FctCall		      "midgTestInit();"
       OrderingInOutPopup      "None"
     }
     Block {

@@ -5,11 +5,15 @@
 #include "midg.h"
 #include "circBuffer.h"
 
+#if MIDG_CHUNKSIZE > 257
+#error "MIDG_CHUNKSIZE must be defined to be <= 257 in midg.h"
+#endif
+
 #if __IN_DSPIC__
 #warning "just a reminder: we're __IN_DSPIC__"
+#include <p33fxxxx.h>
 #include <uart.h>
 #include "simpleUart.h"
-#include <p33fxxxx.h>
 #else
 #warning "just a reminder: we're NOT __IN_DSPIC__ so we're compiling for a PC?"
 #include <stdio.h>
@@ -56,7 +60,8 @@ CBRef midgUartBuffer;   // use the pointer!
         #error "Check midg.h for UART selection--exactly one must be selected"
     #endif
 
-
+    #warning "just a reminder: using midgInit() for dsPic"
+    
     // UART and Buffer initialization
     void midgInit (void){
         // initialize the circular buffer
@@ -69,15 +74,15 @@ CBRef midgUartBuffer;   // use the pointer!
         UMODEbits.UARTEN	= 0;		// Disable the port		
         UMODEbits.USIDL 	= 0;		// Stop on idle
         UMODEbits.IREN		= 0;		// No IR decoder
-        UMODEbits.RTSMD	= 0;		// Ready to send mode (irrelevant)
+        UMODEbits.RTSMD	    = 0;		// Ready to send mode (irrelevant)
         UMODEbits.UEN		= 0;		// Only RX and TX
         UMODEbits.WAKE		= 1;		// Enable at startup
         UMODEbits.LPBACK	= 0;		// Disable loopback
-        UMODEbits.ABAUD	= 0;		// Disable autobaud
+        UMODEbits.ABAUD	    = 0;		// Disable autobaud
         UMODEbits.URXINV	= 0;		// Normal operation (high is idle)
-        UMODEbits.PDSEL	= 0;		// No parity 8 bit
-        UMODEbits.STSEL	= 0;		// 1 stop bit
-        UMODEbits.BRGH 	= 0;		// Low speed mode
+        UMODEbits.PDSEL	    = 0;		// No parity 8 bit
+        UMODEbits.STSEL	    = 0;		// 1 stop bit
+        UMODEbits.BRGH 	    = 0;		// Low speed mode
         
         // UxSTA Register (set by #define in midg.h)
         // ==============
@@ -87,8 +92,7 @@ CBRef midgUartBuffer;   // use the pointer!
         
         // UxBRG Register (set by #define in midg.h)
         // ==============
-        //UBRG = MIDG_UBRG;			// Set the baud rate for MIDG's default
-        UBRG = UCSCAP_UBRGF; // test @ 19200
+        UBRG = MIDG_UBRG;			// Set the baud rate for MIDG's default
         
         // Enable the port;
         UMODEbits.UARTEN	= 1;		// Enable the port
@@ -100,9 +104,6 @@ CBRef midgUartBuffer;   // use the pointer!
         {
             Nop();
         }
-    
-        printToUart2("uart2 initialized in midgInit()\n\r");
-        while(BusyUART2());
         
         // configure the MIDG to only send desired messages
         midgConfig();
@@ -115,6 +116,11 @@ CBRef midgUartBuffer;   // use the pointer!
         // Enable the port;
         USTAbits.UTXEN		= 0;		// Disable TX	
         UMODEbits.UARTEN	= 1;		// Enable the port		
+        
+        // Clear the overrun error since MIDG has been 
+        // transmitting this whole time all input is ignored once it is set
+        USTAbits.OERR		= 0;		// clear overun error
+        
     }
     
     // Interrupt service routine for MIDG UART port, selected in midg.h
@@ -139,6 +145,7 @@ CBRef midgUartBuffer;   // use the pointer!
     }
        
 #else
+    #warning "just a reminder: using midgInit() for PC"
     void midgInit (void){
         // initialize the circular buffer
         midgUartBuffer = newCircBuffer(BSIZE);
@@ -170,11 +177,24 @@ void midgConfig() {
             printf("%02X ", midgConfigMsgs[currentMessage][currentByte]);
             #endif
         }
-    #if !__IN_DSPIC__
-    printf("\n");
-    #endif
+        #if !__IN_DSPIC__
+        printf("\n");
+        #endif
         
-    //maybe we'll have to wait here?
+        //maybe we'll have to wait here?
+        int i;
+        for( i = 0; i < 32700; i += 1 ) {
+            Nop();
+        }
+    }
+    
+    // lots of debug to the other UART
+    for ( currentMessage = 0; currentMessage < numMessages; currentMessage++ ) {
+        // send one byte out at a time.  midgConfigMsgs[currentMessage][3]+6 = count+6 = message length
+        for ( currentByte = 0; currentByte < midgConfigMsgs[currentMessage][3]+6; currentByte++ ) {
+            printToUart1("%02X ", midgConfigMsgs[currentMessage][currentByte]);
+        }
+        printToUart1("\n\r");
     }
 }
 
@@ -182,14 +202,16 @@ void midgRead(unsigned char* midgChunk) {
     unsigned int tmpLen = getLength(midgUartBuffer);
     unsigned int i;
     
-    #if !__IN_DSPIC__
-    printf("tmpLen before readFront()s = %u\n", tmpLen);
+    #if __IN_DSPIC__
+    printToUart1("tmpLen in midgRead() = %u\n\r", tmpLen);
+    #else
+    printf("tmpLen in midgRead() = %u\n", tmpLen);
     #endif
     
     // midgChunk[0] = bytes in midgChunk after read
     // midgChunk[MIDG_CHUNKSIZE-1] = bytes remaining in buffer after read
     if ( tmpLen > MIDG_CHUNKSIZE - 2 ) {
-        // max after front, last removed
+        // read as much as we can after the front and last have been removed
         midgChunk[0] = MIDG_CHUNKSIZE - 2;  
         midgChunk[MIDG_CHUNKSIZE-1] = tmpLen - midgChunk[0];
     } else {
@@ -201,8 +223,9 @@ void midgRead(unsigned char* midgChunk) {
     for ( i = 1; i <= midgChunk[0]; i++ ) {
         midgChunk[i] = readFront(midgUartBuffer);
     }
-    #if !__IN_DSPIC__
-    printf("getLength(midgUartBuffer) = %u\n", getLength(midgUartBuffer));
+    #if __IN_DSPIC__
+    //printToUart1("midgChunk[0] = %u\n\r",midgChunk[0]);
+    //printToUart1("midgChunk[MIDG_CHUNKSIZE-1] = %u\n\r",midgChunk[MIDG_CHUNKSIZE-1]);
     #endif
 }
 
