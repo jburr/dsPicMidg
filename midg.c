@@ -181,13 +181,16 @@ void midgConfig() {
         printf("\n");
         #endif
         
+        #if __IN_DSPIC__
         //maybe we'll have to wait here?
         int i;
         for( i = 0; i < 32700; i += 1 ) {
             Nop();
         }
+        #endif
     }
     
+    /*
     // lots of debug to the other UART
     for ( currentMessage = 0; currentMessage < numMessages; currentMessage++ ) {
         // send one byte out at a time.  midgConfigMsgs[currentMessage][3]+6 = count+6 = message length
@@ -196,6 +199,7 @@ void midgConfig() {
         }
         printToUart1("\n\r");
     }
+     */
 }
 
 void midgRead(unsigned char* midgChunk) {
@@ -205,7 +209,7 @@ void midgRead(unsigned char* midgChunk) {
     #if __IN_DSPIC__
     printToUart1("tmpLen in midgRead() = %u\n\r", tmpLen);
     #else
-    printf("tmpLen in midgRead() = %u\n", tmpLen);
+    //printf("\n\ntmpLen in midgRead() = %u\n", tmpLen);
     #endif
     
     // midgChunk[0] = bytes in midgChunk after read
@@ -223,6 +227,7 @@ void midgRead(unsigned char* midgChunk) {
     for ( i = 1; i <= midgChunk[0]; i++ ) {
         midgChunk[i] = readFront(midgUartBuffer);
     }
+    
     #if __IN_DSPIC__
     //printToUart1("midgChunk[0] = %u\n\r",midgChunk[0]);
     //printToUart1("midgChunk[MIDG_CHUNKSIZE-1] = %u\n\r",midgChunk[MIDG_CHUNKSIZE-1]);

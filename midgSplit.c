@@ -28,6 +28,8 @@ void midgSplit (unsigned char * data) {
 	unsigned char i;
 	unsigned char headerFound=0, noMoreBytes = 1;
 	
+    // FIXME: this requires MIDG_CHUNKSIZE < 257.  
+    // if data[0] is 255, then i overflows from 255 to 0 and this is infinite
 	// Add the received bytes to the protocol parsing circular buffer
     for(i = 1; i <= data[0]; i += 1 )
 	{

@@ -10,7 +10,7 @@
 #define MIDG_UBRG 21 
 // if FCY = 40 000 000
 
-#define MIDG_CHUNKSIZE 257
+#define MIDG_CHUNKSIZE 200
 
 /*******************************************************************************
  * Creates a new MIDG message with incorrect checksum bytes.
