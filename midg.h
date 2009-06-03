@@ -40,5 +40,4 @@ void midgConfig(void);
 void midgMsgAppendChecksum(unsigned char* message);
 void midgRead(unsigned char* midgChunk);
 
-
 #endif /* _MIDG_H_ */

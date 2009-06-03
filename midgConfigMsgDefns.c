@@ -41,11 +41,4 @@ static unsigned char* midgConfigMsgs[] = {   midgMsgDiv_1
                                             ,midgMsgDiv_26
                                             ,midgMsgDiv_27
                                             };
-
-                                            
-/*
-static unsigned char* midgConfigMsgs[] = {   midgMsgDiv_10
-                                            ,midgMsgDiv_12
-                                            };
-*/
                                             

@@ -1,6 +1,3 @@
-// Code by: John B. Burr, heavily based on bufferedUART.c
-// Started 5/17/09
-
 #include "apDefinitions.h"
 #include "midg.h"
 #include "circBuffer.h"
@@ -59,10 +56,9 @@ CBRef midgUartBuffer;   // use the pointer!
     #else
         #error "Check midg.h for UART selection--exactly one must be selected"
     #endif
-
-    #warning "just a reminder: using midgInit() for dsPic"
     
     // UART and Buffer initialization
+    #warning "just a reminder: using midgInit() for dsPic"
     void midgInit (void){
         // initialize the circular buffer
         midgUartBuffer = (struct CircBuffer*)&midgUartBufferData;
@@ -117,10 +113,11 @@ CBRef midgUartBuffer;   // use the pointer!
         USTAbits.UTXEN		= 0;		// Disable TX	
         UMODEbits.UARTEN	= 1;		// Enable the port		
         
-        // Clear the overrun error since MIDG has been 
-        // transmitting this whole time all input is ignored once it is set
+        /* Clear the overrun error since MIDG has been transmitting this 
+         * whole time during initialization and has been ignoring input 
+         * since the overflow
+         */
         USTAbits.OERR		= 0;		// clear overun error
-        
     }
     
     // Interrupt service routine for MIDG UART port, selected in midg.h
@@ -189,29 +186,12 @@ void midgConfig() {
         }
         #endif
     }
-    
-    /*
-    // lots of debug to the other UART
-    for ( currentMessage = 0; currentMessage < numMessages; currentMessage++ ) {
-        // send one byte out at a time.  midgConfigMsgs[currentMessage][3]+6 = count+6 = message length
-        for ( currentByte = 0; currentByte < midgConfigMsgs[currentMessage][3]+6; currentByte++ ) {
-            printToUart1("%02X ", midgConfigMsgs[currentMessage][currentByte]);
-        }
-        printToUart1("\n\r");
-    }
-     */
 }
 
 void midgRead(unsigned char* midgChunk) {
     unsigned int tmpLen = getLength(midgUartBuffer);
     unsigned int i;
-    
-    #if __IN_DSPIC__
-    //printToUart1("tmpLen in midgRead() = %u\n\r", tmpLen);
-    #else
-    //printf("\n\ntmpLen in midgRead() = %u\n", tmpLen);
-    #endif
-    
+        
     // midgChunk[0] = bytes in midgChunk after read
     // midgChunk[MIDG_CHUNKSIZE-1] = bytes remaining in buffer after read
     if ( tmpLen > MIDG_CHUNKSIZE - 2 ) {
@@ -227,11 +207,6 @@ void midgRead(unsigned char* midgChunk) {
     for ( i = 1; i <= midgChunk[0]; i++ ) {
         midgChunk[i] = readFront(midgUartBuffer);
     }
-    
-    #if __IN_DSPIC__
-    //printToUart1("midgChunk[0] = %u\n\r",midgChunk[0]);
-    //printToUart1("midgChunk[MIDG_CHUNKSIZE-1] = %u\n\r",midgChunk[MIDG_CHUNKSIZE-1]);
-    #endif
 }
 
 void midgMsgAppendChecksum(unsigned char* message) {
@@ -241,16 +216,6 @@ void midgMsgAppendChecksum(unsigned char* message) {
     
     int length = message[3]+6;
 
-    /*
-    #if !__IN_DSPIC__
-    printf("in midgMsgAppendChecksum()\n");
-    for ( n = 0; n < length; n++ ) {
-       printf("%02X ", (unsigned int)message[n]);
-    }
-    printf("\n");
-    #endif
-     */
-    
     for (checksum0=0, checksum1=0, n=2; n < length-2; n++) {
        checksum0=checksum0+message[n];
        checksum1=checksum1+checksum0;
@@ -258,13 +223,4 @@ void midgMsgAppendChecksum(unsigned char* message) {
     
     message[length-2] = checksum0;
     message[length-1] = checksum1;
-    
-    /*
-    #if !__IN_DSPIC__
-    for ( n = 0; n < length; n++ ) {
-       printf("%02X ", (unsigned int)message[n]);
-    }
-    printf("\n");
-    #endif
-     */
 }

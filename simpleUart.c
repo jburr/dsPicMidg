@@ -6,8 +6,8 @@
 #include "apDefinitions.h"
 #include "simpleUart.h"
 
-// FIXME: just grabbing MIDG_UBRG
-#include "midg.h"
+#define UBRG_115200 21 
+// if FCY = 40 000 000
 
 // UART and Buffer initialization
 void uartInit (void){
@@ -29,13 +29,12 @@ void uartInit (void){
 	
 	// U1STA Register
 	// ==============
-	//U1STAbits.URXISEL	= 2;		// RX interrupt when 3 chars are in
-    U1STAbits.URXISEL	= 0;		// RX interrupt when just one char comes in
+	U1STAbits.URXISEL	= 0;		// RX interrupt when just one char comes in
 	U1STAbits.OERR		= 0;		// clear overun error
 	
 	// U1BRG Register
 	// ==============
-	U1BRG = MIDG_UBRG;			// Set the baud rate to try and keep up with MIDG
+	U1BRG = UBRG_115200;			// Set the baud rate to try and keep up with MIDG
     
 	// Enable the port;
 	U1MODEbits.UARTEN	= 1;		// Enable the port	

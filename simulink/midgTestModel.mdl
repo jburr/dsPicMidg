@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.95"
+    ComputedModelVersion    "1.97"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -44,8 +44,8 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "jburr"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Jun 02 19:54:12 2009"
-  ModelVersionFormat	  "1.%<AutoIncrement:95>"
+  LastModifiedDate	  "Wed Jun 03 16:43:39 2009"
+  ModelVersionFormat	  "1.%<AutoIncrement:97>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -761,7 +761,7 @@ Model {
   }
   System {
     Name		    "midgTestModel"
-    Location		    [1282, 78, 2302, 748]
+    Location		    [130, 177, 809, 655]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -777,42 +777,10 @@ Model {
     ReportName		    "simulink-default.rpt"
     Block {
       BlockType		      Reference
-      Name		      "C Function Call2"
+      Name		      "50Hz Parser Update"
       Tag		      "dsPIC_dsPIC_CFunctionCall"
       Ports		      []
-      Position		      [65, 320, 190, 360]
-      List {
-	ListType		RTWdata
-	FctDeclaration		"extern void midgTestInit();"
-	FctCall			"midgTestInit();"
-	fctName			"midgTestInit"
-	INPUT_SIZE		"0"
-	OUTPUT_SIZE		"0"
-	NBR_INPUT		"0"
-	NBR_OUTPUT		"0"
-      }
-      SourceBlock	      "dsPICdrivers/OTHERS/C Function Call"
-      SourceType	      "C Function Call"
-      fctName		      "'midgTestInit'"
-      INPUT_SIZE	      "0"
-      INPUT1		      "--"
-      INPUT2		      "--"
-      INPUT3		      "--"
-      OUTPUT_SIZE	      "0"
-      OUTPUT1		      "--"
-      SampleTime	      "inf"
-      InputType		      "[ ]"
-      OutputType	      "[ ]"
-      FctDeclaration	      "extern void midgTestInit();"
-      FctCall		      "midgTestInit();"
-      OrderingInOutPopup      "None"
-    }
-    Block {
-      BlockType		      Reference
-      Name		      "C Function Call3"
-      Tag		      "dsPIC_dsPIC_CFunctionCall"
-      Ports		      []
-      Position		      [300, 440, 425, 480]
+      Position		      [405, 405, 530, 445]
       List {
 	ListType		RTWdata
 	FctDeclaration		"extern void midgParserToUart1();"
@@ -873,7 +841,7 @@ Model {
       BlockType		      Reference
       Name		      "Counter\nLimited"
       Ports		      [0, 1]
-      Position		      [285, 190, 315, 220]
+      Position		      [95, 210, 125, 240]
       SourceBlock	      "simulink/Sources/Counter\nLimited"
       SourceType	      "Counter Limited"
       ShowPortLabels	      "FromPortIcon"
@@ -890,7 +858,7 @@ Model {
     Block {
       BlockType		      DataTypeConversion
       Name		      "Data Type Conversion2"
-      Position		      [510, 153, 575, 177]
+      Position		      [320, 173, 385, 197]
       ShowName		      off
       OutDataTypeMode	      "boolean"
       RndMeth		      "Floor"
@@ -899,7 +867,7 @@ Model {
     Block {
       BlockType		      DataTypeConversion
       Name		      "Data Type Conversion3"
-      Position		      [515, 193, 580, 217]
+      Position		      [325, 213, 390, 237]
       ShowName		      off
       OutDataTypeMode	      "boolean"
       RndMeth		      "Floor"
@@ -908,7 +876,7 @@ Model {
     Block {
       BlockType		      DataTypeConversion
       Name		      "Data Type Conversion4"
-      Position		      [510, 238, 575, 262]
+      Position		      [320, 258, 385, 282]
       ShowName		      off
       OutDataTypeMode	      "boolean"
       RndMeth		      "Floor"
@@ -919,7 +887,7 @@ Model {
       Name		      "Digital Output Write"
       Tag		      "dsPIC_Digital_Output"
       Ports		      [1]
-      Position		      [615, 145, 730, 185]
+      Position		      [425, 165, 540, 205]
       Priority		      "5"
       SourceBlock	      "dsPICdrivers/Digital I//O/Digital Output Write"
       SourceType	      ""
@@ -933,7 +901,7 @@ Model {
       Name		      "Digital Output Write1"
       Tag		      "dsPIC_Digital_Output"
       Ports		      [1]
-      Position		      [750, 185, 865, 225]
+      Position		      [560, 205, 675, 245]
       Priority		      "5"
       SourceBlock	      "dsPICdrivers/Digital I//O/Digital Output Write"
       SourceType	      ""
@@ -947,7 +915,7 @@ Model {
       Name		      "Digital Output Write2"
       Tag		      "dsPIC_Digital_Output"
       Ports		      [1]
-      Position		      [605, 230, 720, 270]
+      Position		      [415, 250, 530, 290]
       Priority		      "5"
       SourceBlock	      "dsPICdrivers/Digital I//O/Digital Output Write"
       SourceType	      ""
@@ -960,7 +928,7 @@ Model {
       BlockType		      Reference
       Name		      "Extract Bits"
       Ports		      [1, 1]
-      Position		      [375, 153, 455, 177]
+      Position		      [185, 173, 265, 197]
       SourceBlock	      "simulink/Logic and Bit\nOperations/Extract Bits"
       SourceType	      "Extract Bits"
       ShowPortLabels	      "FromPortIcon"
@@ -980,7 +948,7 @@ Model {
       BlockType		      Reference
       Name		      "Extract Bits1"
       Ports		      [1, 1]
-      Position		      [380, 193, 460, 217]
+      Position		      [190, 213, 270, 237]
       SourceBlock	      "simulink/Logic and Bit\nOperations/Extract Bits"
       SourceType	      "Extract Bits"
       ShowPortLabels	      "FromPortIcon"
@@ -1000,7 +968,7 @@ Model {
       BlockType		      Reference
       Name		      "Extract Bits2"
       Ports		      [1, 1]
-      Position		      [375, 238, 455, 262]
+      Position		      [185, 258, 265, 282]
       SourceBlock	      "simulink/Logic and Bit\nOperations/Extract Bits"
       SourceType	      "Extract Bits"
       ShowPortLabels	      "FromPortIcon"
@@ -1026,6 +994,38 @@ Model {
       SourceBlock	      "dsPICdrivers/Simulink Configuration/Generate Co"
 "de"
       SourceType	      ""
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "Initialize Everything"
+      Tag		      "dsPIC_dsPIC_CFunctionCall"
+      Ports		      []
+      Position		      [230, 405, 355, 445]
+      List {
+	ListType		RTWdata
+	FctDeclaration		"extern void midgTestInit();"
+	FctCall			"midgTestInit();"
+	fctName			"midgTestInit"
+	INPUT_SIZE		"0"
+	OUTPUT_SIZE		"0"
+	NBR_INPUT		"0"
+	NBR_OUTPUT		"0"
+      }
+      SourceBlock	      "dsPICdrivers/OTHERS/C Function Call"
+      SourceType	      "C Function Call"
+      fctName		      "'midgTestInit'"
+      INPUT_SIZE	      "0"
+      INPUT1		      "--"
+      INPUT2		      "--"
+      INPUT3		      "--"
+      OUTPUT_SIZE	      "0"
+      OUTPUT1		      "--"
+      SampleTime	      "inf"
+      InputType		      "[ ]"
+      OutputType	      "[ ]"
+      FctDeclaration	      "extern void midgTestInit();"
+      FctCall		      "midgTestInit();"
+      OrderingInOutPopup      "None"
     }
     Block {
       BlockType		      Reference
@@ -1150,6 +1150,11 @@ Model {
 	DstBlock		"Extract Bits2"
 	DstPort			1
       }
+    }
+    Annotation {
+      Name		      "Simple LEDs just to make sure something is happ"
+"ening on the Explorer 16"
+      Position		      [348, 149]
     }
   }
 }

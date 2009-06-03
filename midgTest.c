@@ -8,37 +8,23 @@
 #include "midgSplit.h"
 
 void midgTestInit() {
+    // initialize UART1 for test and debug output
     uartInit();
     
+    // initialize the MIDG's UART and configure messages to send
     midgInit();
     
+    // initialize buffers for midgParser
     midgParserInit();
-    
-    // FIXME: the rest of this init routine can be removed...
-    //        it's just for learning about the compiler/dsPic
-    printToUart1("just a bit of testing...\n\r");
-    
-    printToUart1("test: sizeof(short) = %u\n\r", sizeof(short));
-    printToUart1("test: sizeof(int) = %u\n\r", sizeof(int));
-    printToUart1("test: sizeof(long) = %u\n\r", sizeof(long));
-    
-    tFloatToChar test;
-    test.flData = 100.0; // Should be 0x42C80000
-    printToUart1("100.0 should be 0x42C80000\n\r");
-    printToUart1("%f = 0x%02X%02X%02X%02X\n\r", test.flData
-                                                , test.chData[3]
-                                                , test.chData[2]
-                                                , test.chData[1]
-                                                , test.chData[0] );
-    printToUart1("dsPic is little endian?\n\r");
 }
 
+/* A test function that copies data from midgRead() to the UART1 to verify
+ * everything is working.  Also includes the bytes sent and bytes remaining.
+ */
 void copyMidgToUart1() {
     unsigned char buf[MIDG_CHUNKSIZE];
     int i;
-    
-    //printToUart1("copyMidgToUart1()\n\r");
-    
+        
     midgRead(buf);
     
     // UART testing
@@ -48,9 +34,11 @@ void copyMidgToUart1() {
         while(BusyUART1());
     }
     printToUart1(":%u\n\r", buf[MIDG_CHUNKSIZE-1]);
-    //printToUart1("buf[MIDG_CHUNKSIZE-1] = %u\n\r",buf[MIDG_CHUNKSIZE-1]);
 }
 
+/* This is an example of how the parser should be used, after initializing
+ * as in midgTestInit()
+ */
 void midgParserToUart1() {
     unsigned char buf[MIDG_CHUNKSIZE];
     

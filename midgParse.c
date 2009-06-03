@@ -22,21 +22,21 @@ void midgParse(unsigned char * sentence) {
 				midgControlData.q.chData[0] 		= sentence[11];
 				midgControlData.r.chData[1] 		= sentence[12];
 				midgControlData.r.chData[0] 		= sentence[13];
-				// Accels                                      1
+				// Accels                                      
 				midgControlData.ax.chData[1] 		= sentence[14];
 				midgControlData.ax.chData[0] 		= sentence[15];
 				midgControlData.ay.chData[1] 		= sentence[16];
 				midgControlData.ay.chData[0] 		= sentence[17];
 				midgControlData.az.chData[1] 		= sentence[18];
 				midgControlData.az.chData[0] 		= sentence[19];
-				// Euler                                       1
+				// Euler                                       
 				midgControlData.yaw.chData[1] 		= sentence[20];
 				midgControlData.yaw.chData[0] 		= sentence[21];
 				midgControlData.pitch.chData[1] 	= sentence[22];
 				midgControlData.pitch.chData[0] 	= sentence[23];
 				midgControlData.roll.chData[1] 		= sentence[24];
 				midgControlData.roll.chData[0] 		= sentence[25];
-				// Quaternions                                 2
+				// Quaternions                                 
 				midgControlData.qw.chData[3] 		= sentence[26];
 				midgControlData.qw.chData[2] 		= sentence[27];
 				midgControlData.qw.chData[1] 		= sentence[28];
@@ -53,17 +53,14 @@ void midgParse(unsigned char * sentence) {
 				midgControlData.qz.chData[2] 		= sentence[39];
 				midgControlData.qz.chData[1] 		= sentence[40];
 				midgControlData.qz.chData[0] 		= sentence[41];
-				// flags                                       4
+				// flags                                       
 				midgControlData.flags 				= sentence[42];
 				
-                //printToUart1("\n\rmidgControlData updated");
-                
                 break;
             case NAV_PV:
 			default:
                 #if __IN_DSPIC__
-                //printToUart1("\n\runrecognized Message ID: %d", sentence[2]);
-                ;
+                printToUart1("\n\runrecognized Message ID: %d", sentence[2]);
                 #else
                 printf("\n\runrecognized Message ID: %d", sentence[2]);
                 #endif
@@ -97,7 +94,9 @@ void printMidgData (tMidgData midg2Print) {
 	#if __IN_DSPIC__
     //printToUart1("\n\r__IN_DSPIC__:");
     
-    // To match the MIDG II display: p,q,r in deg/sec; ax,ay,az in milli-g; yaw,pitch,roll in degrees
+    // To match the MIDG II display: 
+    // p,q,r in deg/sec; ax,ay,az in milli-g; yaw,pitch,roll in degrees
+    // NOTE: This takes way too long at 50Hz, but is ok at 5Hz
     /*printToUart1("\n\r%lu\t%0.2f\t%0.2f\t%0.2f\t%d\t%d\t%d\t%0.2f\t%0.2f\t%0.2f", 
             midg2Print.timeStamp.ulData,
 			midg2Print.p.shData*0.01,
@@ -111,31 +110,16 @@ void printMidgData (tMidgData midg2Print) {
             midg2Print.roll.shData*0.01);
             */
     
-    // Shorter printing (less data, no floats)
+    // Shorter printing of just accelerations in milli-g (less data, no floats)
     printToUart1("\n\r%lu\t%d\t%d\t%d", 
             midg2Print.timeStamp.ulData,
 			midg2Print.ax.shData,
             midg2Print.ay.shData,
             midg2Print.az.shData );
 
-            
-            /*
-    // FIXME: autopilot units? 
-    // currently rad/sec, g, deg
-    printToUart1("\n\r%lu\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f", 
-            midg2Print.timeStamp.ulData,
-			midg2Print.p.shData*0.01*DEG2RAD,
-			midg2Print.q.shData*0.01*DEG2RAD,
-			midg2Print.r.shData*0.01*DEG2RAD,
-            midg2Print.ax.shData*0.001,
-            midg2Print.ay.shData*0.001,
-            midg2Print.az.shData*0.001,
-            midg2Print.yaw.shData*0.01,
-            midg2Print.pitch.shData*0.01,
-            midg2Print.roll.shData*0.01);
-            */
     #else
-    // To match the MIDG II display: p,q,r in deg/sec; ax,ay,az in milli-g; yaw,pitch,roll in degrees
+    // To match the MIDG II display: 
+    // p,q,r in deg/sec; ax,ay,az in milli-g; yaw,pitch,roll in degrees
     printf("\n\r%lu\t%0.2f\t%0.2f\t%0.2f\t%d\t%d\t%d\t%0.2f\t%0.2f\t%0.2f", 
             midg2Print.timeStamp.ulData,
 			midg2Print.p.shData*0.01,

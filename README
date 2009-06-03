@@ -1,1 +1,20 @@
+dsPic MIDG Driver
 
+John B. Burr
+Mariano I. Lizarraga
+
+Autonomous Systems Lab, UCSC
+
+June 3, 2009
+----------------------
+
+There are several components to this projects: the low level UART driver required for comunication with the MIDG, the MIDG Splitter/Parser, and a command line test application that vaguely simulates UART behavior.  There are two targets: a hex file for the dsPic that is configured in simulink/midgTestModel.mdl and a command like executable that's been developed and tested in Mac OS X.
+
+As currently configured (and tested on an Explorer 16 board) the MIDG is connected to UART2 and UART1 is used for sending output to a PC.  UART1 is configured as a very simple (and slow, since it's not interrupt driven) UART that exists only for debugging.  UART2 is configured to talk to the MIDG, turning off most messages, then to fill a buffer as data enters the receive FIFO.  When this test project is integrated into any other project, the simple UART1 will need to be removed.
+
+Changing the __IN_DSPIC__ #define to be 0 (zero), instead of 1, will allow this to be compiled for execution on the command line using make.  This uses midgSim to read captured MIDG binary data from a file and sporadically add it to a buffer.  midgSimParserTest then calls all functions as the embedded version does, but instead of reading from the buffer written to by a UART in the dsPic, this buffer is written by midgSimStep().
+
+
+Known Issues
+------------
+Currently the size of the circular buffer size is 512 and the maximum size of the buffer that transfers data from midgRead() to midgSplit() can be no more than 257, so that the first element of this buffer can correctly store the number of bytes being transfered.  As a result, however, there can be more bytes remaining to be read than can be represented in the last element of the buffer, so this may roll over back to zero from 255.  Reading the number of bytes remaining in the UART buffer should be done carefully!  Decreasing the size of the circular buffer by changing BSIZE should fix this, though it hasn't been tested.
