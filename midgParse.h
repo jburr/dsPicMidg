@@ -8,7 +8,7 @@
 #define NAV_SENSOR	10
 
 typedef struct tMidgData{
-	tUnsignedIntToChar		timeStamp;
+	tUnsignedLongToChar		timeStamp;
 	tShortToChar			p;
 	tShortToChar			q;
 	tShortToChar			r;

@@ -86,8 +86,8 @@ CBRef midgUartBuffer;   // use the pointer!
         
         // UxSTA Register (set by #define in midg.h)
         // ==============
-        //USTAbits.URXISEL	= 2;		// RX interrupt when 3 chars are in
-        USTAbits.URXISEL	= 0;		// RX interrupt when just one char comes in
+        USTAbits.URXISEL	= 2;		// RX interrupt when 3 chars are in
+        //USTAbits.URXISEL	= 0;		// RX interrupt when just one char comes in
         USTAbits.OERR		= 0;		// clear overun error
         
         // UxBRG Register (set by #define in midg.h)
@@ -207,7 +207,7 @@ void midgRead(unsigned char* midgChunk) {
     unsigned int i;
     
     #if __IN_DSPIC__
-    printToUart1("tmpLen in midgRead() = %u\n\r", tmpLen);
+    //printToUart1("tmpLen in midgRead() = %u\n\r", tmpLen);
     #else
     //printf("\n\ntmpLen in midgRead() = %u\n", tmpLen);
     #endif

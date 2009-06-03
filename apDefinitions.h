@@ -182,7 +182,7 @@ and data types.
 
 // ifdef switches for debugging and conditional inclusion
 // ======================================================
-#define __IN_DSPIC__ 	0 // switch for use in PC
+#define __IN_DSPIC__ 	1 // switch for use in PC
 
 #if __IN_DSPIC__
 	#ifdef DEBUG
@@ -215,6 +215,11 @@ typedef union{
 	unsigned char   chData[4];
  	int   			inData;
 } tIntToChar; 
+
+typedef union{
+	unsigned char   chData[4];
+ 	unsigned long   ulData;
+} tUnsignedLongToChar;
 
 typedef union{
 	unsigned char   chData[4];

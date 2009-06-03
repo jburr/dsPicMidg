@@ -16,15 +16,16 @@ static unsigned char midgMsgDiv_25[] = MIDG_MSG_OFF(25);
 static unsigned char midgMsgDiv_26[] = MIDG_MSG_OFF(26);
 static unsigned char midgMsgDiv_27[] = MIDG_MSG_OFF(27);
 
-/*
+
 // Messages at 50 Hz
 static unsigned char midgMsgDiv_10[] = MIDG_MSG_DIV(10,1);
 static unsigned char midgMsgDiv_12[] = MIDG_MSG_DIV(12,1);
-*/
 
+/*
 // Messages at 5 Hz, just for testing
 static unsigned char midgMsgDiv_10[] = MIDG_MSG_DIV(10,10);
 static unsigned char midgMsgDiv_12[] = MIDG_MSG_DIV(12,10);
+*/
 
 static unsigned char* midgConfigMsgs[] = {   midgMsgDiv_1
                                             ,midgMsgDiv_2

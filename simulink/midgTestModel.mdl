@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.86"
+    ComputedModelVersion    "1.95"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -44,8 +44,8 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "jburr"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed May 27 21:02:39 2009"
-  ModelVersionFormat	  "1.%<AutoIncrement:86>"
+  LastModifiedDate	  "Tue Jun 02 19:54:12 2009"
+  ModelVersionFormat	  "1.%<AutoIncrement:95>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -325,7 +325,7 @@ Model {
 	  CustomHeaderCode	  "#define __IN_DSPIC__ 1\n"
 	  CustomInclude		  "..\\"
 	  CustomSource		  "..\\circBuffer.c ..\\midg.c ..\\midgTest.c "
-"..\\simpleUart.c"
+"..\\simpleUart.c ..\\midgParse.c ..\\midgSplit.c\n"
 	  IncludeHyperlinkInReport off
 	  LaunchReport		  off
 	  TargetLang		  "C"
@@ -590,7 +590,7 @@ Model {
 	PropName		"Components"
       }
       Name		      "Configuration"
-      CurrentDlgPage	      "Real-Time Workshop"
+      CurrentDlgPage	      "Real-Time Workshop/Custom Code"
     }
     PropName		    "ConfigurationSets"
   }
@@ -761,7 +761,7 @@ Model {
   }
   System {
     Name		    "midgTestModel"
-    Location		    [115, 212, 1135, 882]
+    Location		    [1282, 78, 2302, 748]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -775,38 +775,6 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "93"
     ReportName		    "simulink-default.rpt"
-    Block {
-      BlockType		      Reference
-      Name		      "C Function Call1"
-      Tag		      "dsPIC_dsPIC_CFunctionCall"
-      Ports		      []
-      Position		      [85, 435, 210, 475]
-      List {
-	ListType		RTWdata
-	FctDeclaration		"extern void copyMidgToUart1();"
-	FctCall			"copyMidgToUart1();"
-	fctName			"copyMidgToUart1"
-	INPUT_SIZE		"0"
-	OUTPUT_SIZE		"0"
-	NBR_INPUT		"0"
-	NBR_OUTPUT		"0"
-      }
-      SourceBlock	      "dsPICdrivers/OTHERS/C Function Call"
-      SourceType	      "C Function Call"
-      fctName		      "'copyMidgToUart1'"
-      INPUT_SIZE	      "0"
-      INPUT1		      "--"
-      INPUT2		      "--"
-      INPUT3		      "--"
-      OUTPUT_SIZE	      "0"
-      OUTPUT1		      "--"
-      SampleTime	      ".02"
-      InputType		      "[ ]"
-      OutputType	      "[ ]"
-      FctDeclaration	      "extern void copyMidgToUart1();"
-      FctCall		      "copyMidgToUart1();"
-      OrderingInOutPopup      "None"
-    }
     Block {
       BlockType		      Reference
       Name		      "C Function Call2"
@@ -837,6 +805,38 @@ Model {
       OutputType	      "[ ]"
       FctDeclaration	      "extern void midgTestInit();"
       FctCall		      "midgTestInit();"
+      OrderingInOutPopup      "None"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "C Function Call3"
+      Tag		      "dsPIC_dsPIC_CFunctionCall"
+      Ports		      []
+      Position		      [300, 440, 425, 480]
+      List {
+	ListType		RTWdata
+	FctDeclaration		"extern void midgParserToUart1();"
+	FctCall			"midgParserToUart1();"
+	fctName			"midgParserToUart1"
+	INPUT_SIZE		"0"
+	OUTPUT_SIZE		"0"
+	NBR_INPUT		"0"
+	NBR_OUTPUT		"0"
+      }
+      SourceBlock	      "dsPICdrivers/OTHERS/C Function Call"
+      SourceType	      "C Function Call"
+      fctName		      "'midgParserToUart1'"
+      INPUT_SIZE	      "0"
+      INPUT1		      "--"
+      INPUT2		      "--"
+      INPUT3		      "--"
+      OUTPUT_SIZE	      "0"
+      OUTPUT1		      "--"
+      SampleTime	      ".02"
+      InputType		      "[ ]"
+      OutputType	      "[ ]"
+      FctDeclaration	      "extern void midgParserToUart1();"
+      FctCall		      "midgParserToUart1();"
       OrderingInOutPopup      "None"
     }
     Block {
